@@ -68,7 +68,7 @@ nii2fst_mult = function(file, ...) {
   d = dim(img)
   indices = expand.grid(dim1 = 1:d[1],
                         dim2 = 1:d[2],
-                        dim2 = 1:d[3])
+                        dim3 = 1:d[3])
   res = lapply(file, nii2fst, ...)
   res = list(indices = indices,
              fst_data = res)
