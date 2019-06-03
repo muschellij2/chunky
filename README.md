@@ -5,6 +5,10 @@
 
 <!-- badges: start -->
 
+[![Travis build
+status](https://travis-ci.com/muschellij2/chunky.svg?branch=master)](https://travis-ci.com/muschellij2/chunky)
+[![AppVeyor build
+status](https://ci.appveyor.com/api/projects/status/github/muschellij2/chunky?branch=master&svg=true)](https://ci.appveyor.com/project/muschellij2/chunky)
 <!-- badges: end -->
 
 The goal of chunky is to create Random Access Imaging Data

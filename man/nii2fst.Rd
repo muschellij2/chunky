@@ -44,5 +44,8 @@ nii2fst(arr)
 nii2fst(arr, read_in = TRUE)
 res = nii2fst_mult(L)
 res = nii2fst_mult(L, read_in = TRUE)
+ind = res$indices
+grab_index = which(ind$dim1 >= 30 & ind$dim2 == 15 & ind$dim3 == 14)
+mat = sapply(res$data, function(x) x[grab_index,])
 }
 }

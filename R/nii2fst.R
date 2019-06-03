@@ -28,6 +28,9 @@
 #' nii2fst(arr, read_in = TRUE)
 #' res = nii2fst_mult(L)
 #' res = nii2fst_mult(L, read_in = TRUE)
+#' ind = res$indices
+#' grab_index = which(ind$dim1 >= 30 & ind$dim2 == 15 & ind$dim3 == 14)
+#' mat = sapply(res$data, function(x) x[grab_index,])
 #' }
 nii2fst = function(file, fst_file = NULL, read_in = FALSE, ...) {
   stopifnot(is.character(file))
@@ -72,9 +75,12 @@ nii2fst_mult = function(file, ...) {
   indices = expand.grid(dim1 = 1:d[1],
                         dim2 = 1:d[2],
                         dim3 = 1:d[3])
+  tfile = tempfile(fileext = ".fst")
+  write_fst(indices, tfile)
+  indices = fst::fst(tfile)
   res = pbapply::pblapply(file, nii2fst, ...)
   res = list(indices = indices,
-             fst_data = res)
+             data = res)
   res
 }
 
