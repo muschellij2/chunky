@@ -35,8 +35,6 @@ devtools::install_github("muschellij2/chunky")
 ```
 ## Example
 
-
-
 ```{r example}
 library(chunky)
 ## basic example code

@@ -2,21 +2,30 @@
 % Please edit documentation in R/nii2fst.R
 \name{nii2fst}
 \alias{nii2fst}
+\alias{check_image_dims}
+\alias{nii2fst_par}
 \title{Convert Nifti Image into FST Fast file}
 \usage{
-nii2fst(x, fst_file = NULL)
+nii2fst(x, fst_file = NULL, ...)
+
+check_image_dims(x)
+
+nii2fst_par(x)
 }
 \arguments{
 \item{x}{an object that \link[RNifti:retrieveNifti]{RNifti::retrieveNifti}}
 
 \item{fst_file}{output filename of FST file}
+
+\item{...}{additional arguments to \link[fst:write_fst]{fst::write_fst}}
 }
 \value{
-A file path
+A file path of the FST file
 }
 \description{
 Convert Nifti Image into FST Fast file
 }
 \examples{
 arr = array(rnorm(50^3), dim = rep(50, 3))
+nii2fst(arr)
 }
