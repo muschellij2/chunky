@@ -39,7 +39,7 @@ nii2fst = function(file, fst_file = NULL, read_in = FALSE, ...) {
   }
   fst::write_fst(img, path = fst_file, ...)
   if (read_in) {
-    return(read_fst(fst_file))
+    return(fst::fst(fst_file))
   } else {
     return(fst_file)
   }
