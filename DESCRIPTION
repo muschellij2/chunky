@@ -1,0 +1,17 @@
+Package: chunky
+Title: Creating Random Access Imaging Data
+Version: 0.0.0.9000
+Authors@R: c(person(given = "John",
+           family = "Muschelli",
+           email = "muschellij2@gmail.com",
+           role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0001-6469-1750")))
+Description: Converts data from a NIfTI format into an FST for fast reading.
+License: GPL-2
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 6.1.1
+Imports: 
+    fst,
+    RNifti
