@@ -3,29 +3,46 @@
 \name{nii2fst}
 \alias{nii2fst}
 \alias{check_image_dims}
-\alias{nii2fst_par}
+\alias{nii2fst_mult}
 \title{Convert Nifti Image into FST Fast file}
 \usage{
-nii2fst(x, fst_file = NULL, ...)
+nii2fst(file, fst_file = NULL, read_in = FALSE, ...)
 
-check_image_dims(x)
+check_image_dims(file)
 
-nii2fst_par(x)
+nii2fst_mult(file, ...)
 }
 \arguments{
-\item{x}{an object that \link[RNifti:retrieveNifti]{RNifti::retrieveNifti}}
+\item{file}{a filename of the image}
 
 \item{fst_file}{output filename of FST file}
+
+\item{read_in}{Read in the FST file using
+\link[fst:read_fst]{fst::read_fst} and return an FST object rather than a
+filename}
 
 \item{...}{additional arguments to \link[fst:write_fst]{fst::write_fst}}
 }
 \value{
-A file path of the FST file
+A file path of the FST file or FST data read if
+\code{read_in = TRUE}
 }
 \description{
 Convert Nifti Image into FST Fast file
 }
 \examples{
-arr = array(rnorm(50^3), dim = rep(50, 3))
+if (requireNamespace("oro.nifti", quietly = TRUE) &
+    requireNamespace("neurobase", quietly = TRUE)) {
+L = lapply(1:10, function(x) {
+arr = oro.nifti::nifti(array(rnorm(50^3), dim = rep(50, 3)))
+tfile = tempfile()
+neurobase::writenii(arr, tfile)
+tfile
+})
+arr = L[[1]]
 nii2fst(arr)
+nii2fst(arr, read_in = TRUE)
+res = nii2fst_mult(L)
+res = nii2fst_mult(L, read_in = TRUE)
+}
 }

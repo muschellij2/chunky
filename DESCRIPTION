@@ -5,7 +5,12 @@ Authors@R: c(person(given = "John",
            family = "Muschelli",
            email = "muschellij2@gmail.com",
            role = c("aut", "cre"),
-           comment = c(ORCID = "0000-0001-6469-1750")))
+           comment = c(ORCID = "0000-0001-6469-1750")),
+            person(given = "Alessandra",
+            family = "Valcarcel",
+            email = "alval@pennmedicine.upenn.edu",
+            role = c("aut")
+            ))
 Description: Converts data from a NIfTI format into an FST for fast reading.
 License: GPL-2
 Encoding: UTF-8
@@ -17,3 +22,6 @@ Imports:
     RNifti
 URL: https://github.com/muschellij2/chunky
 BugReports: https://github.com/muschellij2/chunky/issues
+Suggests: 
+    oro.nifti,
+    neurobase
