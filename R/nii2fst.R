@@ -48,10 +48,13 @@ nii2fst = function(file, fst_file = NULL, read_in = FALSE, ...) {
 
 #' @rdname nii2fst
 check_image_dims = function(file) {
-  file = lapply(file, RNifti::readNifti)
-  d = dim(file[[1]])
-  check = sapply(file, function(r){
-    all(dim(r) == d)
+  dims = lapply(file, function(x) {
+    d = RNifti::niftiHeader(x)$dim
+    d = d[ 2:(d[1] + 2  - 1)]
+  })
+  d = dims[[1]]
+  check = sapply(dims, function(r){
+    all(r == d)
   })
   if (!all(check)) {
     stop("dimensions of the images are not the same!")
