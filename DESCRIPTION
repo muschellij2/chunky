@@ -1,4 +1,4 @@
-Package: chunky
+Package: fstnii
 Title: Creating Random Access Imaging Data
 Version: 0.0.0.9000
 Authors@R: c(person(given = "John",
@@ -21,8 +21,8 @@ Imports:
     fst,
     RNifti,
     pbapply
-URL: https://github.com/muschellij2/chunky
-BugReports: https://github.com/muschellij2/chunky/issues
+URL: https://github.com/muschellij2/fstnii
+BugReports: https://github.com/muschellij2/fstnii/issues
 Suggests: 
     oro.nifti,
     neurobase

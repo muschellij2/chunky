@@ -1,6 +1,9 @@
-^chunky\.Rproj$
+^fstnii\.Rproj$
 ^\.Rproj\.user$
 ^README\.Rmd$
 ^\.Rhistory$
 ^\.travis\.yml$
 ^appveyor\.yml$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
