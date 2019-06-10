@@ -1,0 +1,164 @@
+---
+title: "Why use the fst package"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{FST and NIfTI images}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = ""
+)
+```
+
+```{r setup}
+library(fstnii)
+```
+
+The [`fst` package](https://www.fstpackage.org/) provides a nice interface for fast access of `data.frame`s.  One of the crucial uses of `fst` is that it can perform [random access](https://en.wikipedia.org/wiki/Random_access) on rows of a data set without reading the data into `R`.
+
+# Use case
+
+The use case we have for this package is that you have a number of aligned NIfTI images that you'd want to be able to subset without reading in the entire data.  The main functions is `nii2fst`, which takes in filenames of NIfTI images and vectorizes them, makes them into `data.frame`s, then reads them into a `fst_table`.  The `nii2fst` function works with 3D and 4D images. 
+
+## 3D Example 
+
+Below we make a series of images, with the same dimensions for each image and get back a vector of filenames.
+
+
+```{r make_3d}
+run = requireNamespace("oro.nifti", quietly = TRUE) &
+    requireNamespace("neurobase", quietly = TRUE)
+if (run) {
+  files_3d = sapply(1:10, function(x) {
+    arr = oro.nifti::nifti(array(rnorm(50^3), dim = rep(50, 3)))
+    tfile = tempfile()
+    neurobase::writenii(arr, tfile)
+    tfile
+  })
+}
+```
+
+Let's run `nii2fst` on just one image:
+```{r}
+if (run) {
+  res = nii2fst(files_3d[1])
+  print(res$indices)
+  print(res$data)
+  print(class(res))
+  print(names(res))
+}
+getOption("crayon.enabled")
+```
+
+We see that the output is a `niifst_table` which has 2 elements, a slot of `indices`, which is a Vx3 `data.frame` of the x,y,z coordinates of the image.  This can be used to subset the `data` element so that you can read in just a subset of the data.  We did not read in the data, however, as the default is `read_in = FALSE`.   Let's run the same thing but read in the data.
+
+```{r read_3d}
+if (run) {
+  res = nii2fst(files_3d[1], read_in = TRUE)
+  print(res$indices)
+  print(res$data)
+  print(class(res))
+  print(names(res))
+}
+getOption("crayon.enabled")
+```
+
+### Reading in all the files
+
+We showed that we can read in one of the files.  Now, let's read in all the files.  This code checks to make sure the dimensions of the images are the same (but no orientation or other checks):
+
+
+```{r read_3d_all}
+if (run) {
+  res = nii2fst(files_3d, read_in = TRUE)
+  print(res$indices)
+  print(length(res$data))
+  print(dim(res$data[[1]]))
+  print(class(res))
+  print(names(res))
+}
+```
+
+### Subsetting the data
+
+Let's get some rows that we want from the data.  Here, we will subset based on `indices`, but apply that subsetting to `data`.  Note, as per https://github.com/fstpackage/fst/issues/108, there is a `dplyr` interface that may be in the works, but right now I'd recommend using base bracket subsetting.
+
+```{r}
+if (run) {
+  index = res$indices
+  index = index$dim1 == 14 & (index$dim2 > 10 & index$dim2 < 14) & (index$dim3 > 4 & index$dim3 < 10)
+  res$data[[1]][index,]
+  mat = sapply(res$data, function(mat) mat[index, ]) 
+  print(dim(mat))
+}
+```
+
+## 4D Example 
+
+When the data are 4D, the data is reshaped so that each column is a different time point.  Here we create the data again, but with 4 dimensions:
+
+```{r}
+if (requireNamespace("oro.nifti", quietly = TRUE) &
+    requireNamespace("neurobase", quietly = TRUE)) {  
+  files_4d = lapply(1:4, function(x) {
+    arr = oro.nifti::nifti(array(rnorm(10^4), dim = rep(10, 4)))
+    tfile = tempfile()
+    neurobase::writenii(arr, tfile)
+    tfile
+  })  
+}
+```
+
+### Reading in one file
+
+Here we will read in the 4D file and then show the corresponding result.  Note, the data now has more than 1 column, where the number of columns coresponds to the number of time points:
+
+```{r read_4d}
+if (run) {
+  res = nii2fst(files_4d[1], read_in = TRUE)
+  print(res$indices)
+  print(res$data)
+  print(dim(res$data))
+  print(class(res))
+  print(names(res))
+}
+```
+
+### Reading in all the files
+
+We showed that we can read in one of the files.  Now, let's read in all the files.  This code checks to make sure the dimensions of the images are the same (but no orientation or other checks):
+
+
+```{r read_4d_all}
+if (run) {
+  res = nii2fst(files_4d, read_in = TRUE)
+  print(res$indices)
+  print(length(res$data))
+  print(dim(res$data[[1]]))
+  print(class(res))
+  print(names(res))
+}
+```
+
+### Subsetting the data
+
+Let's get some rows that we want from the data.  Here, we will subset based on `indices`, but apply that subsetting to `data`.  Note, as per https://github.com/fstpackage/fst/issues/108, there is a `dplyr` interface that may be in the works, but right now I'd recommend using base bracket subsetting.
+
+```{r}
+if (run) {
+  index = res$indices
+  index = index$dim1 == 8 & (index$dim2 > 2 & index$dim2 < 5) & (index$dim3 > 4 & index$dim3 < 7)
+  res$data[[1]][index,]
+  mat = lapply(res$data, function(mat) mat[index, ]) 
+  print(length(mat))
+  print(sapply(mat, dim))
+  if (requireNamespace("abind", quietly = TRUE)) {
+    mat = abind::abind(mat, along = 3)
+    print(dim(mat))
+  }
+}
+```

@@ -25,4 +25,13 @@ URL: https://github.com/muschellij2/fstnii
 BugReports: https://github.com/muschellij2/fstnii/issues
 Suggests: 
     oro.nifti,
-    neurobase
+    neurobase,
+    knitr,
+    rmarkdown,
+    kirby21.base,
+    kirby21.fmri,
+    kirby21.t1,
+    testthat,
+    abind,
+    covr
+VignetteBuilder: knitr

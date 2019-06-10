@@ -9,6 +9,8 @@
 status](https://travis-ci.com/muschellij2/fstnii.svg?branch=master)](https://travis-ci.com/muschellij2/fstnii)
 [![AppVeyor build
 status](https://ci.appveyor.com/api/projects/status/github/muschellij2/fstnii?branch=master&svg=true)](https://ci.appveyor.com/project/muschellij2/fstnii)
+[![Codecov test
+coverage](https://codecov.io/gh/muschellij2/fstnii/branch/master/graph/badge.svg)](https://codecov.io/gh/muschellij2/fstnii?branch=master)
 <!-- badges: end -->
 
 The goal of fstnii is to create Random Access Imaging Data

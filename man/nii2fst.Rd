@@ -3,14 +3,14 @@
 \name{nii2fst}
 \alias{nii2fst}
 \alias{check_image_dims}
-\alias{nii2fst_mult}
+\alias{.nii2fst}
 \title{Convert Nifti Image into FST Fast file}
 \usage{
 nii2fst(file, fst_file = NULL, read_in = FALSE, ...)
 
 check_image_dims(file)
 
-nii2fst_mult(file, ...)
+.nii2fst(file, fst_file = NULL, read_in = FALSE, ...)
 }
 \arguments{
 \item{file}{a filename of the image}
@@ -24,8 +24,9 @@ filename}
 \item{...}{additional arguments to \link[fst:write_fst]{fst::write_fst}}
 }
 \value{
-A file path of the FST file or FST data read if
-\code{read_in = TRUE}
+A list of the indices of the image and
+a file path of the FST file or FST data read if
+\code{read_in = TRUE}.
 }
 \description{
 Convert Nifti Image into FST Fast file
@@ -42,8 +43,30 @@ tfile
 arr = L[[1]]
 nii2fst(arr)
 nii2fst(arr, read_in = TRUE)
-res = nii2fst_mult(L)
-res = nii2fst_mult(L, read_in = TRUE)
+res = nii2fst(L)
+res = nii2fst(L, read_in = TRUE)
+ind = res$indices
+grab_index = which(ind$dim1 >= 30 & ind$dim2 == 15 & ind$dim3 == 14)
+mat = sapply(res$data, function(x) x[grab_index,])
+}
+
+
+
+# 4d exmample
+if (requireNamespace("oro.nifti", quietly = TRUE) &
+    requireNamespace("neurobase", quietly = TRUE)) {
+L = lapply(1:10, function(x) {
+arr = oro.nifti::nifti(array(rnorm(10^4), dim = rep(10, 4)))
+tfile = tempfile()
+neurobase::writenii(arr, tfile)
+tfile
+})
+arr = L[[1]]
+nii2fst(arr)
+nii2fst(arr, read_in = TRUE)
+res = nii2fst(L)
+res = nii2fst(L, read_in = TRUE)
+dim(res$data[[1]])
 ind = res$indices
 grab_index = which(ind$dim1 >= 30 & ind$dim2 == 15 & ind$dim3 == 14)
 mat = sapply(res$data, function(x) x[grab_index,])
