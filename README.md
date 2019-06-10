@@ -6,7 +6,7 @@
 <!-- badges: start -->
 
 [![Travis build
-status](https://travis-ci.com/muschellij2/fstnii.svg?branch=master)](https://travis-ci.com/muschellij2/fstnii)
+status](https://travis-ci.com/muschellij2/chunky.svg?branch=master)](https://travis-ci.com/muschellij2/chunky)
 [![AppVeyor build
 status](https://ci.appveyor.com/api/projects/status/github/muschellij2/fstnii?branch=master&svg=true)](https://ci.appveyor.com/project/muschellij2/fstnii)
 [![Codecov test
