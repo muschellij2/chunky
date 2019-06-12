@@ -41,3 +41,26 @@ testthat::test_that("Checking 5D with drop example", {
     testthat::expect_true(file.exists(out$data))
   }
 })
+
+
+testthat::test_that("Not same dimensions", {
+  if (requireNamespace("oro.nifti", quietly = TRUE) &
+      requireNamespace("neurobase", quietly = TRUE)) {
+    nd = rep(10, 3)
+    L = lapply(1:2, function(x) {
+      arr = oro.nifti::nifti(array(rnorm(prod(nd)),
+                                   dim = nd))
+      tfile = tempfile()
+      neurobase::writenii(arr, tfile)
+      tfile
+    })
+    img = neurobase::readnii(L[[2]])
+    arr = img[,,1:9]
+    img = neurobase::copyNIfTIHeader(img = img, arr = arr)
+    tfile = tempfile()
+    neurobase::writenii(img, tfile)
+    L[[2]] = tfile
+    testthat::expect_error({out = nii2fst(L)},
+                           regexp = "dimensions.*same")
+  }
+})
